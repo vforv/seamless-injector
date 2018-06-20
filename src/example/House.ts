@@ -1,0 +1,4 @@
+@Event()
+export class House {
+    
+}
