@@ -11,6 +11,7 @@ export const Event = (type?: string): IGenericClass<IType<any>> => {
     };
 };
 
-export const Emitter = (c: any) => {
-    return Container.emit(c)
+export const Getter = <T>(event: string): T => {
+    const c = Container.emit(event);
+    return c.message;
 };

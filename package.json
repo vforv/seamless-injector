@@ -1,17 +1,36 @@
 {
-  "name": "eventify",
+  "name": "seamless-injector",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Better way to manage dependencies",
+  "main": "dist/index",
+  "typings": "dist/index",
+  "typescript": {
+    "definition": "dist/index"
   },
-  "author": "",
+  "scripts": {
+    "build": "tsc --traceResolution",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "dev": "nodemon",
+    "test": "nyc --check-coverage --lines 95 --functions 100 --branches 100 --statements 95 mocha -r ts-node/register test/**/*.test.ts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "ts-node": "npm run lint && ts-node ./example"
+  },
+  "author": "Vladimir Djukic <www.vladimirdjukic.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vforv/seamless-injector"
+  },
   "license": "ISC",
   "dependencies": {
     "typescript": "^2.9.2"
   },
   "devDependencies": {
-    "@types/node": "^10.3.3"
+    "@types/node": "^10.3.3",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "nyc": "^12.0.2",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.10.0"
   }
 }

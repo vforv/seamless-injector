@@ -1,12 +1,15 @@
-import { Event, Emitter } from '../Event';
+import { Event, Getter } from '../Event';
 
 @Event()
 export class Door {
-    constructor() {}
+    constructor() { }
 
     get() {
-        const window = Emitter('Window');
-        console.log(window.message.get());
-        console.log("Door")
+        return 'Door';
+    }
+
+    sizeDoorWindow() {
+        const window = Getter<any>('Window');
+        console.log(`Size of window on door is: ${window.size()}`);
     }
 }

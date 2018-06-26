@@ -1,8 +1,18 @@
 import { Event } from '../Event';
 
-@Event()
+@Event('singleton')
 export class Window {
-    get () {
+    private windowSize: number;
+
+    constructor() {
+        this.windowSize = Math.random();
+    }
+
+    get() {
         return 'Window';
+    }
+
+    size() {
+        return this.windowSize;
     }
 }

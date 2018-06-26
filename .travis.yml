@@ -1,0 +1,19 @@
+language: typescript
+node_js:
+- 6.11.4
+before_install:
+- npm install -g typescript@2.8.3
+after_success: npm run coverage
+script:
+- npm i
+- npm test
+- npm run lint
+- npm run build
+deploy:
+  provider: npm
+  email: vladimirdjukic90@gmail.com
+  api_key: ${TOKEN}
+  skip_cleanup: true
+  on:
+    tags: false
+    repo: vforv/seamless-injector

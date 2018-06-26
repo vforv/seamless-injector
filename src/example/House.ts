@@ -1,18 +1,15 @@
-import { Event, Emitter } from '../Event';
-import { Door } from './Door';
-import { Container } from '../Container';
+import { Event, Getter } from '../Event';
 import { Boot } from '../Boot';
-import { Window } from './Window';
 
 @Event()
 export class House extends Boot {
     register() {
-        const doorClass = Emitter('Door');
+        const door = Getter<any>('Door');
+        const window = Getter<any>('Window');
 
-        doorClass.message.get();
-        console.log("TEST")
+        console.log(`House has ${door.get()} and ${window.get()}`);
+        door.sizeDoorWindow();
+        console.log(`Size of other windows in the house is same because of singleton class: ${window.size()}`)
+        
     }
 }
-
-const d = Container.resolve([Door, House, Window]);
-d.register();
