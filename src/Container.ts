@@ -1,21 +1,28 @@
 import { EventEmitter } from "events";
 import { IType } from './Model';
 import { Boot } from './Boot';
+import { allPatterns } from './patterns';
 
 export interface IContainer {
     set(target: IType<any>, type?: string): any;
-    resolve<T>(target: any): any;
+    resolve(target: any[]): Boot;
     emit(e: any): any;
+    mock(mocked: any, mockedWith: any, type: string): void;
 }
 
 /*eslint new-parens: "error"*/
 export const Container: IContainer = new class {
     private emitter: EventEmitter;
-    private boot: Boot;
-    private singletonEvents: Map<any, any>;
+    private boot: any;
+    private patterns: Map<string, any>
 
     constructor() {
-        this.singletonEvents = new Map();
+        this.patterns = new Map();
+
+        allPatterns.forEach((pattern) => {
+            this.patterns.set(pattern.name, pattern);
+        });
+
         // create new emitter and method which return class
         this.emitter = new class extends EventEmitter {
             public emitClass<T>(event: any, obj = {}): T | {} {
@@ -36,6 +43,13 @@ export const Container: IContainer = new class {
     }
 
     /**
+     * Unbind all events
+     */
+    public mock(mocked: any, mockedWith: any, type: string = 'DefaultPattern') {
+        this.registerDeps(type, mockedWith);
+    }
+
+    /**
      * 
      * @param target class not init
      * @param type 
@@ -45,22 +59,32 @@ export const Container: IContainer = new class {
             this.boot = new target();
         }
 
-        if(type === 'singleton') {
-            this.singletonEvents.set(target.name, new target());
-
-            this.emitter.on(target.name, (e) => {
-                e.message = this.singletonEvents.get(target.name);
-            });
-        } else {
-            this.emitter.on(target.name, (e) => {
-                e.message = new target();
-            });
+        if (!type) {
+            type = 'DefaultPattern';
         }
-        
-        
+
+        this.registerDeps(type, target);
     }
 
-    public resolve<T>(targets: any[]) {
+    private registerDeps(type: string, target: any) {
+        const patternResolve = this.patterns.get(type);
+        const reg = new patternResolve(this.emitter);
+
+        const eventName = this.getEventName(target);
+        reg.register(eventName, target);
+    }
+
+    private getEventName(target: any): string {
+        let eventName = target.name;
+
+        if (eventName.slice(-4) === 'Mock') {
+            eventName = eventName.slice(0, -4);
+        }
+
+        return eventName;
+    }
+
+    public resolve(targets: any[]): Boot {
         return this.boot;
     }
 }
