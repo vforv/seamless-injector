@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/vforv/seamless-injector.svg?branch=master)](https://travis-ci.org/vforv/seamless-injector)
