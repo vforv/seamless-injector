@@ -7,6 +7,26 @@
   "typescript": {
     "definition": "dist/index"
   },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "coverage",
+      "test",
+      "src/example",
+      "src/Model.ts",
+      "dist",
+      "src/index.ts"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "all": true
+  },
   "scripts": {
     "build": "tsc --traceResolution",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
