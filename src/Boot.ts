@@ -1,3 +1,3 @@
 export abstract class Boot {
-    abstract register(): any;
-};
+    protected abstract register(): any;
+}

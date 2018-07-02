@@ -2,7 +2,7 @@ import { IGenericClass, IType } from './Model';
 import { Container } from './Container';
 
 export interface IAction {
-    event: string
+    event: string;
 }
 
 export const Event = (type?: string): IGenericClass<IType<any>> => {

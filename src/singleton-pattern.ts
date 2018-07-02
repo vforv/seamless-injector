@@ -1,4 +1,4 @@
-import { AbstractPattern } from "./abstract-pattern";
+import { AbstractPattern } from './abstract-pattern';
 
 export class SingletonPattern implements AbstractPattern {
     private singletonEvents: Map<string, any>;

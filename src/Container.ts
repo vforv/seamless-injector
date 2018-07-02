@@ -1,7 +1,8 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events';
 import { IType } from './Model';
 import { Boot } from './Boot';
 import { allPatterns } from './patterns';
+import { CustomEmitter } from './custom-emitter';
 
 export interface IContainer {
     set(target: IType<any>, type?: string): any;
@@ -14,7 +15,7 @@ export interface IContainer {
 export const Container: IContainer = new class {
     private emitter: EventEmitter;
     private boot: any;
-    private patterns: Map<string, any>
+    private patterns: Map<string, any>;
 
     constructor() {
         this.patterns = new Map();
@@ -24,22 +25,16 @@ export const Container: IContainer = new class {
         });
 
         // create new emitter and method which return class
-        this.emitter = new class extends EventEmitter {
-            public emitClass<T>(event: any, obj = {}): T | {} {
-                this.emit(event, obj);
-                return obj;
-            }
-        };
+        this.emitter = new CustomEmitter();
     }
 
     /**
      * get class
-     * 
      * @param event this should be class wihich we want to return
      */
     public emit(event: string) {
         const emitter: any = this.emitter;
-        return emitter.emitClass(event)
+        return emitter.emitClass(event);
     }
 
     /**
@@ -50,9 +45,8 @@ export const Container: IContainer = new class {
     }
 
     /**
-     * 
      * @param target class not init
-     * @param type 
+     * @param type
      */
     public set(target: IType<any>, type?: string) {
         if (target.prototype instanceof Boot) {
@@ -66,12 +60,8 @@ export const Container: IContainer = new class {
         this.registerDeps(type, target);
     }
 
-    private registerDeps(type: string, target: any) {
-        const patternResolve = this.patterns.get(type);
-        const reg = new patternResolve(this.emitter);
-
-        const eventName = this.getEventName(target);
-        reg.register(eventName, target);
+    public resolve(targets: any[]): Boot {
+        return this.boot;
     }
 
     private getEventName(target: any): string {
@@ -83,8 +73,11 @@ export const Container: IContainer = new class {
 
         return eventName;
     }
+    private registerDeps(type: string, target: any) {
+        const patternResolve = this.patterns.get(type);
+        const reg = new patternResolve(this.emitter);
 
-    public resolve(targets: any[]): Boot {
-        return this.boot;
+        const eventName = this.getEventName(target);
+        reg.register(eventName, target);
     }
-}
+}();

@@ -8,11 +8,11 @@ export class Window {
         this.windowSize = Math.random();
     }
 
-    get() {
+    public get() {
         return 'Window';
     }
 
-    size() {
+    public size() {
         return this.windowSize;
     }
 }

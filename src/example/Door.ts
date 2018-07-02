@@ -2,13 +2,11 @@ import { Event, Getter } from '../Event';
 
 @Event()
 export class Door {
-    constructor() { }
-
-    get() {
+    public get() {
         return 'Door';
     }
 
-    sizeDoorWindow() {
+    public sizeDoorWindow() {
         const window = Getter<any>('Window');
         console.log(`Size of window on door is: ${window.size()}`);
     }

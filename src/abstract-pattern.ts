@@ -1,3 +1,3 @@
 export abstract class AbstractPattern {
-    abstract register(name: string, target: any): any;
+    public abstract register(name: string, target: any): any;
 }
