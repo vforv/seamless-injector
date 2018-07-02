@@ -1,6 +1,6 @@
 import { Event } from '../Event';
 
-@Event('singleton')
+@Event('SingletonPattern')
 export class Window {
     private windowSize: number;
 
