@@ -1,7 +1,7 @@
 import 'mocha';
 import { expect } from 'chai';
 import { Register } from '../src/Register';
-import { TESTCLASS, TESTCLASSMock } from './mock/TESTCLASS';
+import { TESTCLASS, TESTCLASSMock, TESTCLASSNOTEXISTSMock } from './mock/TESTCLASS';
 
 describe('Register tests', () => {
     it('Register dependencies', () => {
@@ -24,6 +24,10 @@ describe('Register tests', () => {
         Register.mock(TESTCLASSMock, 'SingletonPattern');
         const testclass: any = Register.emit('TESTCLASS');
         expect(testclass.message.getClass()).to.be.equals('TestClassMock');
+    })
+
+    it('Cannot mock class which doesnt exists', () => {
+        expect(() => Register.mock(TESTCLASSNOTEXISTSMock, 'DefaultPattern')).throws(`TESTCLASSNOTEXISTS cannot be mocked because that class doesn't exist.`);
     })
 
     it('Register dependencies wrong pattern', () => {

@@ -30,3 +30,20 @@ export class TESTCLASSMock {
     }
 }
 
+export class TESTCLASSNOTEXISTSMock {
+    public num: number;
+
+    constructor() {
+        this.num = Math.random();
+    }
+    
+    public getClass() {
+        return 'TestClassMock';
+    }
+
+    public rndNum() {
+        return this.num;
+    }
+}
+
+

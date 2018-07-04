@@ -71,6 +71,10 @@ export const Register: IContainer = new class {
 
         if (eventName.slice(-4) === 'Mock') {
             eventName = eventName.slice(0, -4);
+            const classRet = this.emit(eventName);
+            if (!classRet || !classRet.message) {
+                throw Error(`${eventName} cannot be mocked because that class doesn't exist.`);
+            }
         }
 
         return eventName;
