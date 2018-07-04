@@ -1,7 +1,7 @@
 import { Event, Getter } from '../Event';
 import { Boot } from '../Boot';
 
-@Event()
+@Event('DefaultPattern')
 export class House extends Boot {
     public register() {
         const door = Getter<any>('Door');

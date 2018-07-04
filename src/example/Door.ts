@@ -1,6 +1,6 @@
 import { Event, Getter } from '../Event';
 
-@Event()
+@Event('DefaultPattern')
 export class Door {
     public get() {
         return 'Door';
