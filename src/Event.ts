@@ -1,5 +1,5 @@
 import { IGenericClass, IType } from './Model';
-import { Container } from './Container';
+import { Register } from './Register';
 
 export interface IAction {
     event: string;
@@ -7,11 +7,11 @@ export interface IAction {
 
 export const Event = (type?: string): IGenericClass<IType<any>> => {
     return (target: IType<any>) => {
-        Container.set(target, type);
+        Register.set(target, type);
     };
 };
 
 export const Getter = <T>(event: string): T => {
-    const c = Container.emit(event);
+    const c = Register.emit(event);
     return c.message;
 };

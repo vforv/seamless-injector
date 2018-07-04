@@ -11,7 +11,7 @@ export class SingletonPattern implements AbstractPattern {
         this.singletonEvents.set(name, new target());
 
         this.emitter.on(name, (e: any) => {
-            e.message = this.singletonEvents.get(target.name);
+            e.message = this.singletonEvents.get(name);
         });
     }
 }

@@ -6,13 +6,13 @@ import { CustomEmitter } from './custom-emitter';
 
 export interface IContainer {
     set(target: IType<any>, type?: string): any;
-    resolve(target: any[]): Boot;
+    bootApp(target?: any[]): Boot;
     emit(e: any): any;
-    mock(mocked: any, mockedWith: any, type: string): void;
+    mock(mocked: any, type: string): void;
 }
 
 /*eslint new-parens: "error"*/
-export const Container: IContainer = new class {
+export const Register: IContainer = new class {
     private emitter: EventEmitter;
     private boot: any;
     private patterns: Map<string, any>;
@@ -40,31 +40,33 @@ export const Container: IContainer = new class {
     /**
      * Unbind all events
      */
-    public mock(mocked: any, mockedWith: any, type: string = 'DefaultPattern') {
-        this.registerDeps(type, mockedWith);
+    public mock(mocked: any, type: string) {
+        const mockedClassOrginalNameAsEventName = this.getEventNameFromClass(mocked);
+        this.registerDeps(type, mocked, mockedClassOrginalNameAsEventName);
     }
 
     /**
      * @param target class not init
      * @param type
      */
-    public set(target: IType<any>, type?: string) {
+    public set(target: IType<any>, type: string) {
         if (target.prototype instanceof Boot) {
             this.boot = new target();
         }
 
         if (!type) {
-            type = 'DefaultPattern';
+            throw new Error(`You must set type for class: ${target.name}`);
         }
 
-        this.registerDeps(type, target);
+        const classNameAsEventName = this.getEventNameFromClass(target);
+        this.registerDeps(type, target, classNameAsEventName);
     }
 
-    public resolve(targets: any[]): Boot {
+    public bootApp(targets?: any[]): Boot {
         return this.boot;
     }
 
-    private getEventName(target: any): string {
+    private getEventNameFromClass(target: any): string {
         let eventName = target.name;
 
         if (eventName.slice(-4) === 'Mock') {
@@ -73,11 +75,15 @@ export const Container: IContainer = new class {
 
         return eventName;
     }
-    private registerDeps(type: string, target: any) {
+
+    private registerDeps(type: string, target: any, eventName: string) {
         const patternResolve = this.patterns.get(type);
+        if (!patternResolve) {
+            throw new Error(`Wrong pattern for class: ${target.name}`);
+        }
+
         const reg = new patternResolve(this.emitter);
 
-        const eventName = this.getEventName(target);
         reg.register(eventName, target);
     }
 }();
