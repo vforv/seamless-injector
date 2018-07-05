@@ -28,6 +28,7 @@ export class Window {
 ```
 
 ```
+// House.ts
 import { Event, Getter } from '../Event';
 import { Window } from './Window';
 
