@@ -65,9 +65,9 @@ export const Register: IContainer = new class {
         if (this.allEvents.get(classNameAsEventName) !== undefined) {
             const tries = this.allEvents.get(classNameAsEventName) as number + 1;
             this.allEvents.set(classNameAsEventName, tries);
-            console.warn(`Class ${classNameAsEventName} already registred ${tries}.`)
+            console.warn(`Class ${classNameAsEventName} already registred ${tries}.`);
 
-            StackTrace.fromError(new Error()).then(stackFrames => {
+            StackTrace.fromError(new Error()).then((stackFrames) => {
                 const path = stackFrames[1].toString();
                 console.warn(`Event decorator being called from: ${path}`);
             });
